@@ -1,9 +1,16 @@
 import "./ColorCard.css";
 import ColorForm from "../ColorForm/ColorForm";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+const contrastScoreToEmojiMap = {
+  Yup: "✨",
+  Kinda: "🤷‍♀️",
+  Nope: "👎",
+};
 
 export default function Color({ color, onDelete, onEdit }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [contrastScoreEmoji, setContrastScoreEmoji] = useState("❓");
 
   function handleShowEditForm() {
     setIsEditing(true);
@@ -23,6 +30,25 @@ export default function Color({ color, onDelete, onEdit }) {
       onDelete(color.id);
     }
   }
+
+  useEffect(() => {
+    async function fetchContrastScore() {
+      const response = await fetch(
+        "https://www.aremycolorsaccessible.com/api/are-they",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ colors: [color.hex, color.contrastText] }),
+        },
+      );
+      const data = await response.json();
+      console.log(data);
+      setContrastScoreEmoji(contrastScoreToEmojiMap[data.overall]);
+    }
+    fetchContrastScore();
+  }, [color.hex, color.contrastText]);
 
   if (isEditing) {
     return (
@@ -53,7 +79,9 @@ export default function Color({ color, onDelete, onEdit }) {
         color: color.contrastText,
       }}
     >
-      <h3 className="color-card__headline">{color.role}</h3>
+      <h3 className="color-card__headline">
+        {color.role} {contrastScoreEmoji}
+      </h3>
       <div className="color-card__buttons">
         <button
           className="color-card__delete-button"
@@ -80,6 +108,7 @@ export default function Color({ color, onDelete, onEdit }) {
 
 function ColorDisplay({ value }) {
   const [showCopyMessage, setShowCopyMessage] = useState(false);
+
   function handleClick() {
     if (showCopyMessage) {
       return;
@@ -89,6 +118,7 @@ function ColorDisplay({ value }) {
     setShowCopyMessage(true);
     setTimeout(() => setShowCopyMessage(false), 2000);
   }
+
   return (
     <div>
       {showCopyMessage && (
