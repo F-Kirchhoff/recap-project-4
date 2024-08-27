@@ -3,9 +3,12 @@ import { useState } from "react";
 import ColorCard from "./Components/ColorCard/ColorCard";
 import ColorForm from "./Components/ColorForm/ColorForm";
 import "./App.css";
+import useLocalStorageState from "use-local-storage-state";
 
 function App() {
-  const [colors, setColors] = useState(initialColors);
+  const [colors, setColors] = useLocalStorageState("theme-creator-colors", {
+    defaultValue: initialColors,
+  });
 
   function handleColorAdd(color) {
     setColors([{ ...color, id: window.crypto.randomUUID() }, ...colors]);
