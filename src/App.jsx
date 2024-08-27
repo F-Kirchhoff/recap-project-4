@@ -3,6 +3,12 @@ import { useState } from "react";
 import ColorCard from "./Components/ColorCard/ColorCard";
 import ColorForm from "./Components/ColorForm/ColorForm";
 import "./App.css";
+import { useEffect } from "react";
+
+const DEFAULT_THEME = {
+  name: "New Theme",
+  colors: [],
+};
 
 function App() {
   const initialThemes = [
@@ -29,99 +35,125 @@ function App() {
 
   const selectedTheme = themes.find((theme) => theme.id === selectedThemeId);
 
-  function handleColorAdd(newColor) {
+  function handleThemeEdit(updatedTheme) {
     const updatedThemes = themes.map((theme) => {
       if (theme.id !== selectedThemeId) {
         return theme;
       }
-
-      const updatedColors = [
-        { id: window.crypto.randomUUID(), ...newColor },
-        ...theme.colors,
-      ];
-      const updatedTheme = {
-        ...theme,
-        colors: updatedColors,
-      };
-
-      console.log(updatedTheme);
-
-      return updatedTheme;
+      return { ...theme, ...updatedTheme };
     });
 
     setThemes(updatedThemes);
+  }
+
+  function handleColorAdd(newColor) {
+    const updatedColors = [
+      { id: window.crypto.randomUUID(), ...newColor },
+      ...selectedTheme.colors,
+    ];
+
+    const updatedTheme = {
+      ...selectedTheme,
+      colors: updatedColors,
+    };
+
+    handleThemeEdit(updatedTheme);
   }
 
   function handleColorDelete(id) {
-    const updatedThemes = themes.map((theme) => {
-      if (theme.id !== selectedThemeId) {
-        return theme;
-      }
+    const updatedColors = selectedTheme.colors.filter(
+      (color) => color.id !== id,
+    );
 
-      const updatedColors = theme.colors.filter((color) => color.id !== id);
+    const updatedTheme = {
+      ...selectedTheme,
+      colors: updatedColors,
+    };
 
-      const updatedTheme = {
-        ...theme,
-        colors: updatedColors,
-      };
-
-      console.log(updatedTheme);
-
-      return updatedTheme;
-    });
-
-    setThemes(updatedThemes);
+    handleThemeEdit(updatedTheme);
   }
 
   function handleColorEdit(updatedColor) {
-    const updatedThemes = themes.map((theme) => {
-      if (theme.id !== selectedThemeId) {
-        return theme;
-      }
+    const updatedColors = selectedTheme.colors.map((color) =>
+      color.id !== updatedColor.id ? color : updatedColor,
+    );
 
-      const updatedColors = theme.colors.map((color) =>
-        color.id !== updatedColor.id ? color : updatedColor,
-      );
+    const updatedTheme = {
+      ...selectedTheme,
+      colors: updatedColors,
+    };
 
-      const updatedTheme = {
-        ...theme,
-        colors: updatedColors,
-      };
+    handleThemeEdit(updatedTheme);
+  }
 
-      console.log(updatedTheme);
+  function handleThemeRename(newName) {
+    const updatedTheme = {
+      ...selectedTheme,
+      name: newName,
+    };
 
-      return updatedTheme;
-    });
+    handleThemeEdit(updatedTheme);
+  }
 
-    setThemes(updatedThemes);
+  function handleThemeAdd() {
+    const newID = window.crypto.randomUUID();
+    setThemes([...themes, { id: newID, ...DEFAULT_THEME }]);
+    setSelectedThemeId(newID);
   }
 
   return (
     <>
       <h1>Theme Creator</h1>
-      <select onChange={(event) => setSelectedThemeId(event.target.value)}>
+      <select
+        value={selectedThemeId}
+        onChange={(event) => setSelectedThemeId(event.target.value)}
+      >
         {themes.map((theme) => (
           <option key={theme.id} value={theme.id}>
             {theme.name}
           </option>
         ))}
       </select>
+      <button onClick={handleThemeAdd}>Add new Theme</button>
       <ThemeDisplay
         theme={selectedTheme}
         onAdd={handleColorAdd}
         onDelete={handleColorDelete}
         onEdit={handleColorEdit}
+        onRename={handleThemeRename}
       />
     </>
   );
 }
 
-function ThemeDisplay({ theme, onAdd, onEdit, onDelete }) {
+function ThemeDisplay({ theme, onAdd, onEdit, onDelete, onRename }) {
+  const [isRename, setIsRename] = useState(false);
   const { colors, name } = theme;
+
+  useEffect(() => {
+    setIsRename(false);
+  }, [theme.name]);
 
   return (
     <>
-      <h2>{name}</h2>
+      {isRename ? (
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            onRename(event.target.elements.name.value);
+            setIsRename(false);
+          }}
+        >
+          <input defaultValue={name} name="name" />
+          <button>Apply Changes</button>
+        </form>
+      ) : (
+        <>
+          <h2>{name}</h2>
+          <button onClick={() => setIsRename(true)}>Edit</button>
+        </>
+      )}
+
       <ColorForm onSubmit={onAdd} />
       <ul>
         {colors.map((color) => (
