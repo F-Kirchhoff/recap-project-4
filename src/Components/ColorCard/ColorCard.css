@@ -21,9 +21,11 @@
 
 .color-card__contrast-color-display {
     text-transform: uppercase;
+    font-weight: bold;
 }
 
 .color-card__main-color {
     align-self: end;
     text-transform: uppercase;
+    font-weight: bold;
 }

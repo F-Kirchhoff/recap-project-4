@@ -1,0 +1,27 @@
+.color-form {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.color-form__input-container {
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    gap: 4px;
+}
+
+.color-form__text-label {
+    grid-column: 1 / -1;
+}
+
+.color-form__color-input-text {
+}
+
+.color-form__color-input-color {
+    width: 100%;
+    height: 100%;
+}
+
+.color-form__role-input {
+    grid-column: 1 / -1;
+}
