@@ -7,7 +7,11 @@ const DEFAULT_COLOR = {
   role: "Primary",
 };
 
-export default function ColorForm({ onSubmit }) {
+export default function ColorForm({
+  onSubmit,
+  isEditing,
+  initialColor = DEFAULT_COLOR,
+}) {
   function handleSubmit(event) {
     event.preventDefault();
 
@@ -17,6 +21,8 @@ export default function ColorForm({ onSubmit }) {
     onSubmit(color);
   }
 
+  const submitText = isEditing ? "Update Color" : "Add Color";
+
   return (
     <form className="color-form" onSubmit={handleSubmit}>
       <label className="color-form__input-container">
@@ -25,21 +31,21 @@ export default function ColorForm({ onSubmit }) {
           type="text"
           id="role"
           name="role"
-          defaultValue={DEFAULT_COLOR.role}
+          defaultValue={initialColor.role}
           className="color-form__role-input"
         />
       </label>
       <ColorInput
         name="hex"
         displayName="Hex"
-        defaultValue={DEFAULT_COLOR.hex}
+        defaultValue={initialColor.hex}
       />
       <ColorInput
         name="contrastText"
         displayName="Contrast Text"
-        defaultValue={DEFAULT_COLOR.contrastText}
+        defaultValue={initialColor.contrastText}
       />
-      <button type="submit">Add Color</button>
+      <button type="submit">{submitText}</button>
     </form>
   );
 }
