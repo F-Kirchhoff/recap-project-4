@@ -3,6 +3,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
+    position: relative;
 }
 
 .color-card__headline {
@@ -12,6 +13,16 @@
     border-radius: 999px;
     grid-column: 1 / -1;
     place-self: start;
+}
+
+.color-card__buttons {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+}
+.color-card__delete-button {
+    place-self: end;
+    justify-self: end;
 }
 
 .color-card__contrast-color {

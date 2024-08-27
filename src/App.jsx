@@ -10,6 +10,10 @@ function App() {
   function handleColorAdd(color) {
     setColors([{ ...color, id: window.crypto.randomUUID() }, ...colors]);
   }
+
+  function handleColorDelete(id) {
+    setColors(colors.filter((color) => color.id !== id));
+  }
   return (
     <>
       <h1>Theme Creator</h1>
@@ -17,7 +21,7 @@ function App() {
       <ul>
         {colors.map((color) => (
           <li key={color.id}>
-            <ColorCard color={color} />
+            <ColorCard color={color} onDelete={handleColorDelete} />
           </li>
         ))}
       </ul>
