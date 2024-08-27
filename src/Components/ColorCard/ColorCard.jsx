@@ -44,7 +44,7 @@ export default function Color({ color, onDelete, onEdit }) {
         },
       );
       const data = await response.json();
-      console.log(data);
+
       setContrastScoreEmoji(contrastScoreToEmojiMap[data.overall]);
     }
     fetchContrastScore();
