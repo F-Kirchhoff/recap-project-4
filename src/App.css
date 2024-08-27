@@ -1,4 +1,8 @@
 body {
-  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  padding: 10px;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    padding: 10px 0;
+}
+
+h1 {
+    padding-inline: 12px;
 }

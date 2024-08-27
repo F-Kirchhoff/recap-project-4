@@ -1,0 +1,29 @@
+.color-card {
+    padding: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+.color-card__headline {
+    display: inline;
+    padding: 4px 12px;
+    background: #0003;
+    border-radius: 999px;
+    grid-column: 1 / -1;
+    place-self: start;
+}
+
+.color-card__contrast-color {
+    place-self: end;
+    text-align: end;
+}
+
+.color-card__contrast-color-display {
+    text-transform: uppercase;
+}
+
+.color-card__main-color {
+    align-self: end;
+    text-transform: uppercase;
+}
