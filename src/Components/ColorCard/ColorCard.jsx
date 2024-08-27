@@ -65,13 +65,38 @@ export default function Color({ color, onDelete, onEdit }) {
           Delete
         </button>
       </div>
-      <p className="color-card__main-color">{color.hex}</p>
-      <p className="color-card__contrast-color">
-        contrast:{" "}
+      <div className="color-card__main-color">
+        <ColorDisplay value={color.hex} />
+      </div>
+      <div className="color-card__contrast-color">
+        contrast:
         <span className="color-card__contrast-color-display">
-          {color.contrastText}
+          <ColorDisplay value={color.contrastText} />
         </span>
-      </p>
+      </div>
+    </div>
+  );
+}
+
+function ColorDisplay({ value }) {
+  const [showCopyMessage, setShowCopyMessage] = useState(false);
+  function handleClick() {
+    if (showCopyMessage) {
+      return;
+    }
+
+    window.navigator.clipboard.writeText(value);
+    setShowCopyMessage(true);
+    setTimeout(() => setShowCopyMessage(false), 2000);
+  }
+  return (
+    <div>
+      {showCopyMessage && (
+        <p className="color-card__copy-message"> ✅ copied to clipboard</p>
+      )}
+      <button className="color-card__color-display" onClick={handleClick}>
+        {value}
+      </button>
     </div>
   );
 }

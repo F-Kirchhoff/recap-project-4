@@ -30,15 +30,8 @@
     text-align: end;
 }
 
-.color-card__contrast-color-display {
-    text-transform: uppercase;
-    font-weight: bold;
-}
-
 .color-card__main-color {
     align-self: end;
-    text-transform: uppercase;
-    font-weight: bold;
 }
 
 .color-card__edit-container {
@@ -49,4 +42,30 @@
     position: absolute;
     top: 4px;
     right: 4px;
+}
+
+.color-card__color-display {
+    background: none;
+    border: none;
+    color: inherit;
+    margin: -4px -8px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: inline;
+}
+
+.color-card__color-display:hover {
+    background: #0003;
+}
+
+.color-card__copy-message {
+    position: absolute;
+    inset: 0;
+    background: #0003;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
